@@ -29,7 +29,13 @@ import DataRightsExportCenter from './admin/pages/DataRightsExportCenter';
 import AIOversightPanel from './admin/pages/AIOversightPanel';
 import EmergencyFreeze from './admin/pages/EmergencyFreeze';
 import AssetConversionEngine from './admin/pages/AssetConversionEngine';
-import PaymentGatewayManager from './admin/pages/PaymentGatewayManager'; // New Import
+import PaymentGatewayManager from './admin/pages/PaymentGatewayManager';
+import WalletNAVManager from './admin/pages/WalletNAVManager';
+import DisputeResolutionCenter from './admin/pages/DisputeResolutionCenter';
+import APIKeyManager from './admin/pages/APIKeyManager';
+import AIGatewayManager from './admin/pages/AIGatewayManager';
+import DeveloperPlatform from './admin/pages/DeveloperPlatform';
+import RoleManagementCenter from './admin/pages/RoleManagementCenter'; // New Import
 import ValidationCenter from './admin/pages/ValidationCenter';
 import AICommandCenter from './admin/pages/AICommandCenter';
 import AuditRiskDashboard from './admin/pages/AuditRiskDashboard';
@@ -78,13 +84,19 @@ const AppContent = () => {
           
           <div className="my-4 h-px bg-ivory-border dark:bg-slate-800 mx-2"></div>
           <p className="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Quản trị Hệ thống</p>
+          <NavItem to="/admin/roles" icon="shield_person" label="Quản lý Vai trò & Quyền" active={location.pathname === '/admin/roles'} />
           <NavItem to="/admin/ruleset" icon="rule" label="Quản lý RuleSet" active={location.pathname === '/admin/ruleset'} />
           <NavItem to="/admin/fund" icon="account_balance" label="Quản trị Quỹ Fund" active={location.pathname === '/admin/fund'} />
+          <NavItem to="/admin/wallet-nav" icon="account_balance_wallet" label="Ví & NAV Toàn hệ" active={location.pathname === '/admin/wallet-nav'} />
+          <NavItem to="/admin/developer" icon="code" label="Cổng Nhà phát triển" active={location.pathname === '/admin/developer'} />
+          <NavItem to="/admin/ai-gateway" icon="smart_toy" label="Cổng AI Gateway" active={location.pathname === '/admin/ai-gateway'} />
+          <NavItem to="/admin/api-keys" icon="key_visualizer" label="Quản lý API Key Vault" active={location.pathname === '/admin/api-keys'} />
+          <NavItem to="/admin/disputes" icon="balance" label="Tranh chấp & Phân xử" active={location.pathname === '/admin/disputes'} />
           <NavItem to="/admin/payment-gateway" icon="payments" label="Cổng nạp/rút Ramp" active={location.pathname === '/admin/payment-gateway'} />
           <NavItem to="/admin/asset-exchange" icon="currency_exchange" label="Quy đổi & Tỷ giá" active={location.pathname === '/admin/asset-exchange'} />
           <NavItem to="/admin/ai-oversight" icon="visibility" label="AI Oversight" active={location.pathname === '/admin/ai-oversight'} />
           <NavItem to="/admin/freeze" icon="emergency" label="Emergency Freeze" active={location.pathname === '/admin/freeze'} />
-          <NavItem to="/admin/data-rights" icon="key_visualizer" label="Quyền & Export Dữ liệu" active={location.pathname === '/admin/data-rights'} />
+          <NavItem to="/admin/data-rights" icon="shield_person" label="Quyền & Export Dữ liệu" active={location.pathname === '/admin/data-rights'} />
           <NavItem to="/admin/simulation" icon="monitoring" label="Mô phỏng & Dự báo" active={location.pathname === '/admin/simulation'} />
           <NavItem to="/admin/country" icon="settings_suggest" label={t.nav.country} active={location.pathname === '/admin/country'} />
           <NavItem to="/admin/compliance-diff" icon="difference" label="Compliance Diff" active={location.pathname === '/admin/compliance-diff'} />
@@ -110,7 +122,7 @@ const AppContent = () => {
                 <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
                   <span className="material-symbols-outlined text-lg">search</span>
                 </span>
-                <input className="w-64 bg-white dark:bg-slate-900 border border-ivory-border dark:border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary text-slate-900 dark:text-white placeholder-slate-400 outline-none" placeholder="Tìm kiếm quy tắc..."/>
+                <input className="w-64 bg-white dark:bg-slate-900 border border-ivory-border dark:border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary text-slate-900 dark:text-white placeholder-slate-400 outline-none" placeholder="Tìm kiếm..."/>
               </div>
           </div>
           <div className="flex items-center gap-4">
@@ -144,8 +156,14 @@ const AppContent = () => {
             <Route path="/public-ledger" element={<PublicLedger />} />
             <Route path="/rulebook" element={<Rulebook />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/admin/roles" element={<RoleManagementCenter />} />
             <Route path="/admin/ruleset" element={<RuleSetManager />} />
             <Route path="/admin/fund" element={<FundGovernanceConsole />} />
+            <Route path="/admin/wallet-nav" element={<WalletNAVManager />} />
+            <Route path="/admin/developer" element={<DeveloperPlatform />} />
+            <Route path="/admin/ai-gateway" element={<AIGatewayManager />} />
+            <Route path="/admin/api-keys" element={<APIKeyManager />} />
+            <Route path="/admin/disputes" element={<DisputeResolutionCenter />} />
             <Route path="/admin/payment-gateway" element={<PaymentGatewayManager />} />
             <Route path="/admin/asset-exchange" element={<AssetConversionEngine />} />
             <Route path="/admin/ai-oversight" element={<AIOversightPanel />} />
@@ -164,12 +182,12 @@ const AppContent = () => {
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">TPS Toàn Cầu:</span>
               <span className="text-sm font-bold text-slate-900 dark:text-white">12,482</span>
             </div>
-            <div className="w-px h-4 bg-ivory-border dark:bg-slate-800 hidden sm:block"></div>
+            <div className="w-px h-4 bg-ivory-border dark:border-slate-800 hidden sm:block"></div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Nút Xác Minh:</span>
               <span className="text-sm font-bold text-slate-900 dark:text-white">8,103</span>
             </div>
-            <div className="w-px h-4 bg-ivory-border dark:bg-slate-800 hidden sm:block"></div>
+            <div className="w-px h-4 bg-ivory-border dark:border-slate-800 hidden sm:block"></div>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tổng Giá Trị Khóa:</span>
               <span className="text-sm font-bold text-primary tracking-tighter">$4.2B</span>
