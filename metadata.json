@@ -1,0 +1,8 @@
+{
+  "name": "UVFL Global",
+  "description": "A decentralized value ecosystem implementing the Create-Validate-Distribute-Renew cycle with multi-asset support, automated compliance, and immutable audit logs.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
