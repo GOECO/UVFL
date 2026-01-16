@@ -21,24 +21,35 @@ const ComplianceDiffViewer = () => {
   const { t } = useLanguage();
   
   // Mock Versions Data
+  // Fix: Updated mock data to strictly follow the CountryProfileData interface defined in governor.ts
   const versions: Record<string, CountryProfileData> = {
     '4.2.0': {
       version: '4.2.0',
       country_name: 'Vietnam',
       iso_code: 'VN',
+      timezone: 'UTC+7',
+      rounding_rule: 'NEAREST',
       default_asset: 'USDT',
+      currency_code: 'VND',
       allowed_assets: ['USDT', 'GOLD', 'VND'],
       reward_enabled: false,
-      tax: { vat: 10, gold_duty: 5 }
+      tax_config: { vat: 10, corporate: 20, withholding: 5, income: 10 },
+      customs_config: { enabled: true, duty_rate: 5, threshold: 1000000 },
+      compliance_config: { kyc_level: 2, residency_required: true, einvoice_required: true }
     },
     '4.3.0': {
       version: '4.3.0',
       country_name: 'Vietnam (Regulated)',
       iso_code: 'VN',
+      timezone: 'UTC+7',
+      rounding_rule: 'NEAREST',
       default_asset: 'VND',
+      currency_code: 'VND',
       allowed_assets: ['VND', 'GOLD', 'USDT', 'REWARD'],
       reward_enabled: true,
-      tax: { vat: 8, gold_duty: 2 }
+      tax_config: { vat: 8, corporate: 20, withholding: 5, income: 10 },
+      customs_config: { enabled: true, duty_rate: 2, threshold: 1000000 },
+      compliance_config: { kyc_level: 2, residency_required: true, einvoice_required: true }
     }
   };
 

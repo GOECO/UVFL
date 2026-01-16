@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../App';
 import { GoogleGenAI } from "@google/genai";
@@ -77,7 +76,8 @@ const AICommandCenter = () => {
     setIsThinking(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+      // Fix: Initialized GoogleGenAI using process.env.API_KEY directly as required by guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: `You are ${selectedAgent.id}: ${selectedAgent.name}, a specialized member of the UVFL Global system. Your core task is: ${selectedAgent.task}. Respond to the user's inquiry in a professional, technical, and helpful manner according to your expertise. Use the current system context (Mainnet v4.2, Decentralized Value Flow, 18 Specialized Agents). Inquiry: ${userMsg}`,
@@ -100,7 +100,7 @@ const AICommandCenter = () => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest">Neural Network</span>
-            <span className="text-slate-400 text-xs font-bold font-mono">STATUS: 18_AGENTS_SYNCHRONIZED</span>
+            <span className="text-slate-400 text-xs font-bold font-mono tracking-widest uppercase">STATUS: 18_AGENTS_SYNCHRONIZED</span>
           </div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter leading-none mb-4">{acc.title}</h1>
           <p className="text-slate-500 max-w-xl font-medium">{acc.subtitle}</p>
@@ -108,7 +108,7 @@ const AICommandCenter = () => {
         
         <div className="hidden lg:flex items-center gap-4 bg-white border border-ivory-border p-4 rounded-3xl shadow-sm">
            <div className="text-right">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Intelligence</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest uppercase tracking-widest">Total Intelligence</p>
               <p className="text-xl font-black text-slate-900">1.8 PetaFLOPS</p>
            </div>
            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
@@ -134,19 +134,19 @@ const AICommandCenter = () => {
               </div>
               <div className="flex items-center gap-1.5">
                 <span className={`size-2 rounded-full ${agent.status === 'active' ? 'bg-emerald-500' : agent.status === 'learning' ? 'bg-amber-500' : 'bg-blue-500'} animate-pulse`}></span>
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest tracking-widest">
                   {agent.status === 'active' ? acc.status.active : agent.status === 'learning' ? acc.status.learning : acc.status.processing}
                 </span>
               </div>
             </div>
             
             <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">{agent.id}</p>
-            <h4 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-3 group-hover:text-primary transition-colors">{agent.name}</h4>
+            <h4 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-3 group-hover:text-primary transition-colors uppercase tracking-tight leading-none mb-3 group-hover:text-primary transition-colors">{agent.name}</h4>
             <p className="text-xs text-slate-400 font-medium leading-relaxed mb-4 line-clamp-2">{agent.task}</p>
             
             <div className="flex items-center gap-2 pt-4 border-t border-ivory-border/50">
                <span className="material-symbols-outlined text-xs text-slate-300">forum</span>
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{acc.consult}</span>
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest tracking-widest">{acc.consult}</span>
             </div>
 
             <div className={`absolute -bottom-10 -right-10 w-24 h-24 rounded-full blur-3xl opacity-10 transition-opacity ${agent.color}`}></div>
@@ -160,7 +160,7 @@ const AICommandCenter = () => {
         {/* Real-time Logs */}
         <div className="bg-slate-900 rounded-[48px] p-8 text-white shadow-2xl relative overflow-hidden flex flex-col h-[600px]">
            <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
-              <h3 className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-emerald-400">
+              <h3 className="text-sm font-black uppercase tracking-widest flex items-center gap-2 text-emerald-400 uppercase tracking-widest flex items-center gap-2 text-emerald-400">
                 <span className="material-symbols-outlined text-emerald-400">terminal</span>
                 {acc.terminal}
               </h3>
@@ -192,8 +192,8 @@ const AICommandCenter = () => {
                     <span className="material-symbols-outlined">{selectedAgent.icon}</span>
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-slate-900 tracking-tight">{selectedAgent.name}</h3>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">UVFL CORE PROTOCOL EXPERT</p>
+                    <h3 className="text-xl font-black text-slate-900 tracking-tight uppercase tracking-tight">{selectedAgent.name}</h3>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest tracking-widest">UVFL CORE PROTOCOL EXPERT</p>
                   </div>
                 </div>
                 <button 
@@ -208,7 +208,7 @@ const AICommandCenter = () => {
                 {chatHistory.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center p-12 opacity-30">
                     <span className="material-symbols-outlined text-6xl mb-4">psychology</span>
-                    <p className="text-sm font-bold">Initiate high-frequency consultation with {selectedAgent.id}.</p>
+                    <p className="text-sm font-bold uppercase tracking-widest">Initiate high-frequency consultation with {selectedAgent.id}.</p>
                   </div>
                 ) : (
                   chatHistory.map((chat, i) => (
@@ -256,8 +256,8 @@ const AICommandCenter = () => {
                <div className="w-24 h-24 bg-ivory-surface rounded-[40px] flex items-center justify-center text-slate-300 mb-6 border border-ivory-border">
                   <span className="material-symbols-outlined text-5xl">smart_toy</span>
                </div>
-               <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">Chọn một chuyên gia để bắt đầu</h3>
-               <p className="text-sm text-slate-500 max-w-sm">Hội đồng 18 chuyên gia AI sẵn sàng hỗ trợ các quyết định quản trị phức tạp nhất của bạn.</p>
+               <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase tracking-tight mb-2">Chọn một chuyên gia để bắt đầu</h3>
+               <p className="text-sm text-slate-500 max-w-sm uppercase font-medium">Hội đồng 18 chuyên gia AI sẵn sàng hỗ trợ các quyết định quản trị phức tạp nhất của bạn.</p>
             </div>
           )}
         </div>
