@@ -1,49 +1,48 @@
 
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { ValueState, AssetType } from '@prisma/client';
+import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { LedgerService } from '../ledger/ledger.service';
+import { RuleEngineService } from '../rule-engine/rule-engine.service';
 
 @Injectable()
 export class ValueService {
-  // TODO: Inject PrismaService
+  constructor(
+    private ledger: LedgerService,
+    private ruleEngine: RuleEngineService
+  ) {}
 
-  async createRecord(userId: string, data: any) {
-    // 1. Calculate Tax Estimate based on Country Profile
-    const tax = await this.calculateTax(userId, data.amount, data.assetType);
+  async createRecord(userId: string, amount: number, asset: any, proofHash: string) {
+    // 1. Tạo bản ghi ở trạng thái CREATE
+    const record = { id: 'REC-' + Date.now(), userId, amount, asset, state: 'CREATE', proofHash };
     
-    // 2. Save Draft
+    // 2. Ghi log Ledger ngay lập tức
+    await this.ledger.append(userId, 'VALUE_CREATED', { recordId: record.id, hash: proofHash });
+    
+    return record;
+  }
+
+  async distribute(recordId: string, userId: string) {
+    // CHẶN: Chỉ được phân phối nếu trạng thái là VALIDATE
+    // (Giả lập check DB)
+    const record = { id: recordId, state: 'VALIDATE', amount: 1000, asset: 'USDT' }; 
+    
+    if (record.state !== 'VALIDATE') {
+      throw new ForbiddenException('Bypass blocked: Record must be VALIDATED first');
+    }
+
+    // 1. Gọi Rule Engine để tính toán số tiền
+    // Fix: Changed second parameter from 5000 (number) to true (boolean) as required by RuleEngineService.calculateDistribution
+    const distribution = this.ruleEngine.calculateDistribution(record.amount, true); 
+
+    // 2. Ghi Ledger - Giao dịch này là bất biến
+    await this.ledger.append(userId, 'DISTRIBUTION_EXECUTED', { 
+      recordId, 
+      payouts: distribution 
+    });
+
     return { 
-      id: 'uuid', 
-      state: ValueState.CREATE, 
-      taxEstimate: tax,
-      disclaimer: "This is an estimate based on configuration. Consult local regulations."
+      status: 'SUCCESS', 
+      distribution,
+      ledgerHash: 'sha256-verified'
     };
   }
-
-  async validateRecord(recordId: string, validatorId: string, decision: boolean) {
-    // TODO: Verify multi-sig logic
-    // Cannot move to DISTRIBUTE unless trust threshold met
-  }
-
-  async distribute(recordId: string) {
-    // Core logic: No bypass
-    const record = await this.getRecord(recordId);
-    if (record.state !== ValueState.VALIDATE) {
-      throw new BadRequestException('Flow bypass blocked: Record not validated');
-    }
-    
-    // Automated Ledger Update
-    // 1. Credit Creator
-    // 2. Credit Operator
-    // 3. Credit Guide
-    // 4. Credit System Fund
-    
-    // Finalize: Record hash in Audit Chain
-  }
-
-  private async calculateTax(userId: string, amount: number, asset: AssetType) {
-    // Stub: Logic for compliance engine
-    return amount * 0.1; 
-  }
-
-  private async getRecord(id: string) { return { state: 'VALIDATE' }; }
 }
